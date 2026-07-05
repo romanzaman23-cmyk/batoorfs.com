@@ -57,9 +57,6 @@ export default async function Footer() {
               <Link href="/contact" className="text-blue-100 hover:text-white transition-colors">
                 Contact
               </Link>
-              <Link href="/admin" className="text-blue-100 hover:text-white transition-colors">
-                Admin Panel
-              </Link>
             </div>
           </div>
         </div>

@@ -122,8 +122,8 @@ export default function HeaderClient({ siteName, tagline, menuItems }: Props) {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-dark-border shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between h-16 lg:h-20">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6">
+        <div className="flex items-center justify-between gap-4 h-16 lg:h-20">
           <Link href="/" className="flex flex-col shrink-0">
             <span className="text-xl lg:text-2xl font-bold text-gradient-gold tracking-wider">
               {siteName}
@@ -133,7 +133,7 @@ export default function HeaderClient({ siteName, tagline, menuItems }: Props) {
             </span>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-0.5 flex-1 justify-center">
+          <nav className="hidden md:flex items-center gap-0.5 flex-1 justify-center flex-wrap">
             {menuItems.map((item) =>
               item.children.length > 0 ? (
                 <div
@@ -169,15 +169,8 @@ export default function HeaderClient({ siteName, tagline, menuItems }: Props) {
             )}
           </nav>
 
-          <Link
-            href="/admin"
-            className="hidden lg:block text-xs text-muted hover:text-gold transition-colors shrink-0"
-          >
-            Admin
-          </Link>
-
           <button
-            className="lg:hidden text-gold"
+            className="md:hidden text-gold ml-auto"
             onClick={() => setMobileOpen(!mobileOpen)}
           >
             {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -186,7 +179,7 @@ export default function HeaderClient({ siteName, tagline, menuItems }: Props) {
       </div>
 
       {mobileOpen && (
-        <div className="lg:hidden bg-white border-t border-dark-border max-h-[80vh] overflow-y-auto">
+        <div className="md:hidden bg-white border-t border-dark-border max-h-[80vh] overflow-y-auto">
           {menuItems.map((item) =>
             item.href && item.children.length === 0 ? (
               <Link
