@@ -1,11 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Lock } from "lucide-react";
 
 export default function AdminLoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -24,10 +22,13 @@ export default function AdminLoginPage() {
       });
 
       if (res.ok) {
-        router.push("/admin");
-        router.refresh();
+        window.location.href = "/admin";
+        return;
       } else {
-        setError("Invalid email or password");
+        const data = await res.json().catch(() => ({}));
+        setError(data.error === "Invalid credentials"
+          ? "Invalid email or password"
+          : "Login failed. Please try again.");
       }
     } catch {
       setError("Login failed");

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
+import { safeDbCount } from "@/lib/admin-db";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
 import {
@@ -17,11 +18,11 @@ export default async function AdminDashboard() {
 
   const [statsCount, panelistsCount, servicesCount, messagesCount, unreadCount] =
     await Promise.all([
-      prisma.stat.count(),
-      prisma.panelist.count(),
-      prisma.service.count(),
-      prisma.contactMessage.count(),
-      prisma.contactMessage.count({ where: { read: false } }),
+      safeDbCount(() => prisma.stat.count()),
+      safeDbCount(() => prisma.panelist.count()),
+      safeDbCount(() => prisma.service.count()),
+      safeDbCount(() => prisma.contactMessage.count()),
+      safeDbCount(() => prisma.contactMessage.count({ where: { read: false } })),
     ]);
 
   const cards = [

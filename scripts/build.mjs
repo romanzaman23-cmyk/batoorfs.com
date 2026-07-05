@@ -8,5 +8,5 @@ const run = (cmd) => execSync(cmd, { stdio: "inherit", env: process.env });
 
 run("npx prisma generate");
 run("npx prisma migrate deploy");
-run("npx tsx scripts/seed-if-empty.mjs");
+run("npx tsx scripts/seed-if-empty.ts");
 run("npx next build");

@@ -1,6 +1,9 @@
 {
   "buildCommand": "npm run build",
   "env": {
-    "DATABASE_URL": "file:./prisma/dev.db"
+    "DATABASE_URL": "file:./prisma/dev.db",
+    "JWT_SECRET": "change-this-in-vercel-dashboard",
+    "ADMIN_EMAIL": "admin@catfit.in",
+    "ADMIN_PASSWORD": "admin123"
   }
 }
