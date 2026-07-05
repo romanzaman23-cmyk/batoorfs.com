@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { getServices } from "@/lib/data";
 import { getSettings } from "@/lib/settings";
 import Link from "next/link";
 import { Shield } from "lucide-react";
@@ -6,10 +6,7 @@ import { Shield } from "lucide-react";
 export default async function SecuritySolutionsPage() {
   const [settings, services] = await Promise.all([
     getSettings(),
-    prisma.service.findMany({
-      where: { category: "security", published: true },
-      orderBy: { sortOrder: "asc" },
-    }),
+    getServices("security"),
   ]);
 
   return (

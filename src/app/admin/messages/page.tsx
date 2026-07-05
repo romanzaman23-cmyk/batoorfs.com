@@ -1,14 +1,16 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
+import { getAdminList } from "@/lib/data";
 import { prisma } from "@/lib/db";
 
 export default async function AdminMessagesPage() {
   const session = await getSession();
   if (!session) redirect("/admin/login");
 
-  const messages = await prisma.contactMessage.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  const messages = await getAdminList(
+    () => prisma.contactMessage.findMany({ orderBy: { createdAt: "desc" } }),
+    []
+  );
 
   return (
     <div className="p-8">

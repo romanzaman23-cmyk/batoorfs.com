@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
+import { getAdminList } from "@/lib/data";
+import { defaultServices } from "@/lib/default-data";
 import { prisma } from "@/lib/db";
 import CrudTable from "@/components/admin/CrudTable";
 
@@ -7,7 +9,10 @@ export default async function AdminServicesPage() {
   const session = await getSession();
   if (!session) redirect("/admin/login");
 
-  const services = await prisma.service.findMany({ orderBy: { sortOrder: "asc" } });
+  const services = await getAdminList(
+    () => prisma.service.findMany({ orderBy: { sortOrder: "asc" } }),
+    defaultServices
+  );
 
   return (
     <div className="p-8">

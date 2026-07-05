@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
+import { getAdminList } from "@/lib/data";
+import { defaultTestimonials } from "@/lib/default-data";
 import { prisma } from "@/lib/db";
 import CrudTable from "@/components/admin/CrudTable";
 
@@ -7,7 +9,10 @@ export default async function AdminTestimonialsPage() {
   const session = await getSession();
   if (!session) redirect("/admin/login");
 
-  const testimonials = await prisma.testimonial.findMany({ orderBy: { sortOrder: "asc" } });
+  const testimonials = await getAdminList(
+    () => prisma.testimonial.findMany({ orderBy: { sortOrder: "asc" } }),
+    defaultTestimonials
+  );
 
   return (
     <div className="p-8">

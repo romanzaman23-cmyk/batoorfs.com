@@ -1,4 +1,4 @@
-import { defaultSettings } from "./default-menu";
+import { defaultSettings } from "./default-data";
 import { prisma } from "./db";
 
 export async function getSettings() {

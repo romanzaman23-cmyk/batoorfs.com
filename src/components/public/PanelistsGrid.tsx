@@ -1,12 +1,8 @@
-import { prisma } from "@/lib/db";
+import { getPanelists } from "@/lib/data";
 import Link from "next/link";
 
 export default async function PanelistsGrid({ limit }: { limit?: number }) {
-  const panelists = await prisma.panelist.findMany({
-    where: { published: true },
-    orderBy: { sortOrder: "asc" },
-    take: limit,
-  });
+  const panelists = await getPanelists(limit);
 
   return (
     <section className="py-20 px-4">
@@ -35,7 +31,7 @@ export default async function PanelistsGrid({ limit }: { limit?: number }) {
           <div className="text-center mt-10">
             <Link
               href="/panelists"
-              className="inline-block px-8 py-3 border border-gold text-gold rounded-full hover:bg-gold/10 transition-colors"
+              className="inline-block px-8 py-3 border border-gold text-gold rounded-full hover:bg-dark-card transition-colors"
             >
               View All Panelists
             </Link>

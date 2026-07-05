@@ -1,10 +1,7 @@
-import { prisma } from "@/lib/db";
+import { getInstitutions } from "@/lib/data";
 
 export default async function InstitutionsSection() {
-  const institutions = await prisma.institution.findMany({
-    where: { published: true },
-    orderBy: { sortOrder: "asc" },
-  });
+  const institutions = await getInstitutions();
 
   if (institutions.length === 0) return null;
 

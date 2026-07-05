@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { getServiceBySlug } from "@/lib/data";
 import { notFound } from "next/navigation";
 
 export default async function ServicePage({
@@ -7,8 +7,8 @@ export default async function ServicePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const service = await prisma.service.findUnique({ where: { slug } });
-  if (!service || !service.published) notFound();
+  const service = await getServiceBySlug(slug);
+  if (!service) notFound();
 
   return (
     <div className="py-20 px-4">

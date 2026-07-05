@@ -1,14 +1,12 @@
+import { getPanelists } from "@/lib/data";
 import { getSettings } from "@/lib/settings";
-import { prisma } from "@/lib/db";
 import Link from "next/link";
 
 export default async function TeamPage() {
-  const settings = await getSettings();
-  const panelists = await prisma.panelist.findMany({
-    where: { published: true },
-    orderBy: { sortOrder: "asc" },
-    take: 6,
-  });
+  const [settings, panelists] = await Promise.all([
+    getSettings(),
+    getPanelists(6),
+  ]);
 
   return (
     <div className="py-20 px-4">

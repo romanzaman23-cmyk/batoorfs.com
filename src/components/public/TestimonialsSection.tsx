@@ -1,10 +1,7 @@
-import { prisma } from "@/lib/db";
+import { getTestimonials } from "@/lib/data";
 
 export default async function TestimonialsSection() {
-  const testimonials = await prisma.testimonial.findMany({
-    where: { published: true },
-    orderBy: { sortOrder: "asc" },
-  });
+  const testimonials = await getTestimonials();
 
   if (testimonials.length === 0) return null;
 

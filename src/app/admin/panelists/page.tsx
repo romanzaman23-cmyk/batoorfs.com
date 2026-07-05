@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
+import { getAdminList } from "@/lib/data";
+import { defaultPanelists } from "@/lib/default-data";
 import { prisma } from "@/lib/db";
 import CrudTable from "@/components/admin/CrudTable";
 
@@ -7,7 +9,10 @@ export default async function AdminPanelistsPage() {
   const session = await getSession();
   if (!session) redirect("/admin/login");
 
-  const panelists = await prisma.panelist.findMany({ orderBy: { sortOrder: "asc" } });
+  const panelists = await getAdminList(
+    () => prisma.panelist.findMany({ orderBy: { sortOrder: "asc" } }),
+    defaultPanelists
+  );
 
   return (
     <div className="p-8">

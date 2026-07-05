@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { getPanelistBySlug } from "@/lib/data";
 import { notFound } from "next/navigation";
 
 export default async function PanelistDetailPage({
@@ -7,8 +7,8 @@ export default async function PanelistDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const panelist = await prisma.panelist.findUnique({ where: { slug } });
-  if (!panelist || !panelist.published) notFound();
+  const panelist = await getPanelistBySlug(slug);
+  if (!panelist) notFound();
 
   return (
     <div className="py-20 px-4">

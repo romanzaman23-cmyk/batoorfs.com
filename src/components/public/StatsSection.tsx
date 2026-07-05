@@ -1,7 +1,7 @@
-import { prisma } from "@/lib/db";
+import { getStats } from "@/lib/data";
 
 export default async function StatsSection() {
-  const stats = await prisma.stat.findMany({ orderBy: { sortOrder: "asc" } });
+  const stats = await getStats();
 
   return (
     <section className="py-16 bg-dark-card border-y border-dark-border">
