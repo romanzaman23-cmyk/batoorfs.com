@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String   @default("Admin")
+  createdAt    DateTime @default(now())
+}
+
+model SiteSetting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+}
+
+model Stat {
+  id        String @id @default(cuid())
+  label     String
+  value     String
+  suffix    String @default("")
+  sortOrder Int    @default(0)
+}
+
+model MenuItem {
+  id        String     @id @default(cuid())
+  title     String
+  href      String?
+  sortOrder Int        @default(0)
+  parentId  String?
+  parent    MenuItem?  @relation("MenuChildren", fields: [parentId], references: [id], onDelete: Cascade)
+  children  MenuItem[] @relation("MenuChildren")
+}
+
+model Service {
+  id          String  @id @default(cuid())
+  title       String
+  slug        String  @unique
+  description String
+  content     String  @default("")
+  category    String
+  icon        String  @default("shield")
+  sortOrder   Int     @default(0)
+  published   Boolean @default(true)
+}
+
+model Panelist {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String  @unique
+  designation String
+  imageUrl    String  @default("")
+  bio         String  @default("")
+  sortOrder   Int     @default(0)
+  published   Boolean @default(true)
+}
+
+model Testimonial {
+  id        String  @id @default(cuid())
+  name      String
+  role      String  @default("")
+  content   String
+  imageUrl  String  @default("")
+  sortOrder Int     @default(0)
+  published Boolean @default(true)
+}
+
+model Institution {
+  id        String  @id @default(cuid())
+  name      String
+  logoUrl   String  @default("")
+  sortOrder Int     @default(0)
+  published Boolean @default(true)
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String   @default("")
+  subject   String   @default("")
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
