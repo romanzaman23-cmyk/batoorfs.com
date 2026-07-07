@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X, ChevronDown, ChevronRight } from "lucide-react";
+import { Menu, X, ChevronDown, ChevronRight, Shield } from "lucide-react";
 
 type MenuItem = {
   id: string;
@@ -20,11 +20,9 @@ type Props = {
 function DropdownLink({
   item,
   onNavigate,
-  nested = false,
 }: {
   item: MenuItem;
   onNavigate?: () => void;
-  nested?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const hasChildren = item.children.length > 0;
@@ -36,12 +34,12 @@ function DropdownLink({
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
       >
-        <div className="flex items-center justify-between px-4 py-2.5 text-sm text-gold hover:bg-dark-card cursor-default">
+        <div className="flex items-center justify-between px-4 py-3 text-sm font-medium text-foreground hover:bg-surface cursor-default rounded-lg mx-1">
           <span>{item.title}</span>
-          <ChevronRight className="w-3.5 h-3.5 shrink-0 ml-2" />
+          <ChevronRight className="w-4 h-4 text-gold shrink-0" />
         </div>
         {open && (
-          <div className="absolute left-full top-0 min-w-[320px] bg-white border border-dark-border shadow-xl py-2 z-50">
+          <div className="absolute left-full top-0 min-w-[300px] bg-white border border-dark-border rounded-xl shadow-[var(--shadow-lg)] py-2 z-50 ml-1">
             {item.children.map((child) => (
               <DropdownLink key={child.id} item={child} onNavigate={onNavigate} />
             ))}
@@ -55,9 +53,7 @@ function DropdownLink({
     <Link
       href={item.href ?? "#"}
       onClick={onNavigate}
-      className={`block px-4 py-2.5 text-sm text-gold hover:bg-dark-card transition-colors ${
-        nested ? "" : ""
-      }`}
+      className="block px-4 py-3 text-sm font-medium text-foreground hover:bg-surface hover:text-gold transition-colors rounded-lg mx-1"
     >
       {item.title}
     </Link>
@@ -74,17 +70,16 @@ function MobileMenuSection({
   onNavigate: () => void;
 }) {
   const [open, setOpen] = useState(false);
-  const padding = 6 + depth * 4;
 
   if (item.children.length > 0) {
     return (
       <div>
         <button
           onClick={() => setOpen(!open)}
-          className={`w-full flex items-center justify-between px-${padding} py-3 text-sm border-b border-dark-border`}
-          style={{ paddingLeft: `${padding * 4}px` }}
+          className="w-full flex items-center justify-between py-3.5 text-sm border-b border-dark-border/60 hover:bg-surface"
+          style={{ paddingLeft: `${16 + depth * 16}px`, paddingRight: "16px" }}
         >
-          <span className={depth === 0 ? "font-semibold text-foreground" : "text-gold"}>
+          <span className={depth === 0 ? "font-semibold text-foreground" : "text-gold font-medium"}>
             {item.title}
           </span>
           <ChevronDown className={`w-4 h-4 transition-transform ${open ? "rotate-180" : ""}`} />
@@ -106,8 +101,8 @@ function MobileMenuSection({
     <Link
       href={item.href ?? "#"}
       onClick={onNavigate}
-      className="block py-2.5 text-sm text-gold hover:bg-dark-card border-b border-dark-border/50"
-      style={{ paddingLeft: `${(padding + 4) * 4}px` }}
+      className="block py-3 text-sm font-medium text-gold hover:bg-surface border-b border-dark-border/40"
+      style={{ paddingLeft: `${32 + depth * 16}px` }}
     >
       {item.title}
     </Link>
@@ -121,19 +116,24 @@ export default function HeaderClient({ siteName, tagline, menuItems }: Props) {
   const closeMobile = () => setMobileOpen(false);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-dark-border shadow-sm">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between gap-4 h-16 lg:h-20">
-          <Link href="/" className="flex flex-col shrink-0">
-            <span className="text-xl lg:text-2xl font-bold text-gradient-gold tracking-wider">
-              {siteName}
-            </span>
-            <span className="text-[10px] lg:text-xs text-muted tracking-[0.3em] uppercase">
-              {tagline}
-            </span>
+    <header className="fixed top-0 left-0 right-0 z-50 glass-header border-b border-dark-border/80 animate-fade-in-down">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="flex items-center justify-between gap-4 h-16 lg:h-[4.5rem]">
+          <Link href="/" className="flex items-center gap-3 shrink-0 group">
+            <div className="w-10 h-10 gradient-gold rounded-xl flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+              <Shield className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <span className="text-lg lg:text-xl font-extrabold text-gradient-gold tracking-wide block leading-none">
+                {siteName}
+              </span>
+              <span className="text-[10px] text-muted tracking-[0.2em] uppercase font-medium">
+                {tagline}
+              </span>
+            </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-0.5 flex-1 justify-center flex-wrap">
+          <nav className="hidden lg:flex items-center gap-1">
             {menuItems.map((item) =>
               item.children.length > 0 ? (
                 <div
@@ -142,16 +142,18 @@ export default function HeaderClient({ siteName, tagline, menuItems }: Props) {
                   onMouseEnter={() => setOpenDropdown(item.id)}
                   onMouseLeave={() => setOpenDropdown(null)}
                 >
-                  <button className="flex items-center gap-1 px-3 py-2 text-sm text-gold hover:text-gold-light transition-colors uppercase tracking-wide font-medium">
+                  <button className="flex items-center gap-1 px-3 py-2 text-[13px] text-foreground/80 hover:text-gold font-semibold uppercase tracking-wide transition-colors rounded-lg hover:bg-surface">
                     {item.title}
-                    <ChevronDown className="w-3 h-3" />
+                    <ChevronDown className="w-3.5 h-3.5" />
                   </button>
                   {openDropdown === item.id && (
-                    <div className="absolute top-full left-0 min-w-[280px] bg-white border border-dark-border shadow-xl pt-0 pb-2 z-50">
-                      <div className="border-t-2 border-gold" />
-                      {item.children.map((child) => (
-                        <DropdownLink key={child.id} item={child} />
-                      ))}
+                    <div className="absolute top-full left-0 pt-2 z-50">
+                      <div className="min-w-[280px] bg-white border border-dark-border rounded-xl shadow-[var(--shadow-lg)] py-2 overflow-hidden">
+                        <div className="h-1 gradient-gold" />
+                        {item.children.map((child) => (
+                          <DropdownLink key={child.id} item={child} />
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -159,8 +161,10 @@ export default function HeaderClient({ siteName, tagline, menuItems }: Props) {
                 <Link
                   key={item.id}
                   href={item.href ?? "/"}
-                  className={`px-3 py-2 text-sm text-gold hover:text-gold-light transition-colors tracking-wide font-medium ${
-                    item.title === "Home" ? "capitalize" : "uppercase"
+                  className={`px-3 py-2 text-[13px] font-semibold uppercase tracking-wide transition-all duration-300 rounded-lg hover:bg-surface hover:text-gold hover:scale-105 ${
+                    item.title === "Home"
+                      ? "capitalize text-foreground/80"
+                      : "text-foreground/80"
                   }`}
                 >
                   {item.title}
@@ -170,22 +174,23 @@ export default function HeaderClient({ siteName, tagline, menuItems }: Props) {
           </nav>
 
           <button
-            className="md:hidden text-gold ml-auto"
+            className="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-surface text-gold ml-auto"
             onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle menu"
           >
-            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
       {mobileOpen && (
-        <div className="md:hidden bg-white border-t border-dark-border max-h-[80vh] overflow-y-auto">
+        <div className="lg:hidden bg-white border-t border-dark-border max-h-[80vh] overflow-y-auto shadow-lg">
           {menuItems.map((item) =>
             item.href && item.children.length === 0 ? (
               <Link
                 key={item.id}
                 href={item.href}
-                className="block px-6 py-3 text-sm text-gold hover:bg-dark-card border-b border-dark-border capitalize"
+                className="block px-6 py-3.5 text-sm font-semibold text-foreground hover:bg-surface border-b border-dark-border/40 capitalize"
                 onClick={closeMobile}
               >
                 {item.title}

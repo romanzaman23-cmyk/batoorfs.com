@@ -1,4 +1,7 @@
 import { getTestimonials } from "@/lib/data";
+import { Quote } from "lucide-react";
+import SectionHeading from "./SectionHeading";
+import AnimateIn from "./AnimateIn";
 
 export default async function TestimonialsSection() {
   const testimonials = await getTestimonials();
@@ -6,23 +9,26 @@ export default async function TestimonialsSection() {
   if (testimonials.length === 0) return null;
 
   return (
-    <section className="py-20 px-4 bg-dark-card">
+    <section className="section-padding bg-surface">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl lg:text-4xl font-bold text-center mb-12">
-          Words From Students
-        </h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          {testimonials.map((t) => (
-            <div
-              key={t.id}
-              className="bg-white border border-dark-border rounded-xl p-6 shadow-sm"
-            >
-              <p className="text-foreground/80 italic mb-4">&ldquo;{t.content}&rdquo;</p>
-              <div>
-                <p className="font-semibold text-gold">{t.name}</p>
-                {t.role && <p className="text-muted text-sm">{t.role}</p>}
+        <AnimateIn animation="fade-up">
+          <SectionHeading eyebrow="Testimonials" title="Words From Students" />
+        </AnimateIn>
+
+        <div className="grid md:grid-cols-3 gap-6">
+          {testimonials.map((t, i) => (
+            <AnimateIn key={t.id} animation="fade-up" delay={i * 120} duration={700}>
+              <div className="relative bg-white border border-dark-border rounded-2xl p-8 card-hover shadow-[var(--shadow)] h-full">
+                <Quote className="w-10 h-10 text-sky-200 mb-4" />
+                <p className="text-foreground/80 italic leading-relaxed mb-6">
+                  &ldquo;{t.content}&rdquo;
+                </p>
+                <div className="border-t border-dark-border pt-4">
+                  <p className="font-bold text-foreground">{t.name}</p>
+                  {t.role && <p className="text-gold text-sm font-medium mt-0.5">{t.role}</p>}
+                </div>
               </div>
-            </div>
+            </AnimateIn>
           ))}
         </div>
       </div>
